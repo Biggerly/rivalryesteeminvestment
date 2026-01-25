@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard | Rivalry Esteem</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* --- Global Styles --- */
+  :root {
+    --primary: #D4AF37; /* Champagne gold */
+    --primary-dark: #B8941F;
+    --secondary: #9CA3AF;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --dark: #111827;
+    --light: #F9FAFB;
+    --border: #374151;
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    --bg-primary: #1F2937; /* Dark background */
+    --bg-secondary: #111827; /* Darker background */
+    --text-primary: #F9FAFB;
+    --text-secondary: #D1D5DB;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+  }
+
+  /* --- Header --- */
+  header {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow);
+  }
+
+  .header-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  /* --- Main Layout --- */
+  main {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border);
+  }
+
+  /* --- Stats Cards --- */
+  .stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    border-left: 4px solid var(--primary);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .stat-card h3 {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-card .number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  /* --- Tables --- */
+  .table-container {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 2rem;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px; /* Ensure tables have minimum width for scrolling */
+  }
+
+  th, td {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-primary);
+  }
+
+  th {
+    background: var(--bg-primary);
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover {
+    background: rgba(212, 175, 55, 0.1); /* Champagne gold with transparency */
+  }
+
+  /* --- Buttons --- */
+  button {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 0.125rem;
+  }
+
+  .btn-primary {
+    background: var(--primary);
+    color: var(--dark);
+  }
+
+  .btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+  }
+
+  .btn-success {
+    background: var(--success);
+    color: white;
+  }
+
+  .btn-success:hover {
+    background: #0da271;
+    transform: translateY(-1px);
+  }
+
+  .btn-danger {
+    background: var(--danger);
+    color: white;
+  }
+
+  .btn-danger:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+  }
+
+  .btn-warning {
+    background: var(--warning);
+    color: white;
+  }
+
+  .btn-warning:hover {
+    background: #d97706;
+    transform: translateY(-1px);
+  }
+
+  .filter-btn {
+    background: #374151;
+    color: var(--text-secondary);
+    margin: 0.25rem;
+  }
+
+  .filter-btn.active {
+    background: var(--primary);
+    color: var(--dark);
+  }
+
+  .filter-btn:hover {
+    transform: translateY(-1px);
+  }
+
+  /* --- Forms --- */
+  .form-container {
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+  }
+
+  /* --- Filter Section --- */
+  .filter-section {
+    background: var(--bg-secondary);
+    padding: 1.25rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+  }
+
+  .filter-section h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--secondary);
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* --- Modal Styles --- */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-content {
+    background: var(--bg-secondary);
+    margin: 10% auto;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 400px;
+    position: relative;
+    box-shadow: var(--shadow-lg);
+    animation: modalSlideIn 0.3s ease;
+  }
+
+  @keyframes modalSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .close {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--secondary);
+    transition: color 0.2s ease;
+  }
+
+  .close:hover {
+    color: var(--primary);
+  }
+
+  .modal h2 {
+    margin-bottom: 1.5rem;
+    color: var(--primary);
+    text-align: center;
+  }
+
+  .modal input {
+    margin-bottom: 1rem;
+  }
+
+  .forgot-password {
+    text-align: center;
+    color: var(--primary);
+    cursor: pointer;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    transition: color 0.2s ease;
+  }
+
+  .forgot-password:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+  }
+
+  /* --- Status Badges --- */
+  .status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .status-pending {
+    background: #FEF3C7;
+    color: #D97706;
+  }
+
+  .status-approved {
+    background: #D1FAE5;
+    color: #065F46;
+  }
+
+  .status-rejected {
+    background: #FEE2E2;
+    color: #DC2626;
+  }
+
+  .status-active {
+    background: #DBEAFE;
+    color: #1E40AF;
+  }
+
+  .status-inactive {
+    background: #F1F5F9;
+    color: #64748B;
+  }
+
+  /* --- Custom Alert/Confirm Modal Styles --- */
+  .custom-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+  }
+
+  .custom-modal-content {
+    background: var(--bg-secondary);
+    margin: 15% auto;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 500px;
+    position: relative;
+    box-shadow: var(--shadow-lg);
+    animation: modalSlideIn 0.3s ease;
+  }
+
+  .custom-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .custom-modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary);
+  }
+
+  .custom-modal-body {
+    margin-bottom: 2rem;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+
+  .custom-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+
+  .custom-modal-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .custom-modal-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+  }
+
+  /* --- Responsive Design --- */
+  @media (max-width: 1024px) {
+    main {
+      padding: 1rem;
+    }
+    
+    .stats-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    header {
+      padding: 1rem;
+    }
+    
+    .header-title {
+      font-size: 1.25rem;
+    }
+    
+    th, td {
+      padding: 0.75rem 1rem;
+      font-size: 0.8125rem;
+    }
+    
+    .stats-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .table-container {
+      overflow-x: auto;
+    }
+    
+    table {
+      min-width: 800px;
+    }
+    
+    .custom-modal-content {
+      margin: 20% auto;
+      padding: 1.5rem;
+    }
+    
+    .custom-modal-footer {
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 480px) {
+    main {
+      padding: 0.5rem;
+    }
+    
+    .modal-content {
+      margin: 20% auto;
+      padding: 1.5rem;
+    }
+    
+    button {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8125rem;
+    }
+    
+    .custom-modal-content {
+      margin: 25% auto;
+      padding: 1.25rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-title">Admin Dashboard</div>
+  <button id="logoutBtn" class="btn-primary">Logout</button>
+</header>
+
+<main>
+  <!-- Stats Overview -->
+  <div class="stats-container">
+    <div class="stat-card">
+      <h3>Total Members</h3>
+      <div class="number" id="totalMembers">0</div>
+    </div>
+    <div class="stat-card">
+      <h3>Active Projects</h3>
+      <div class="number" id="activeProjects">0</div>
+    </div>
+    <!--<div class="stat-card">
+      <h3>Pending Activities</h3>
+      <div class="number" id="pendingActivities">0</div>
+    </div>-->
+    <div class="stat-card">
+      <h3>Total Balance</h3>
+      <div class="number" id="totalBalance">0</div>
+    </div>
+  </div>
+
+  <!-- Users Section -->
+  <section>
+    <h2 class="section-title">Users Management</h2>
+    <button id="addUserBtn" class="btn-primary">Add User</button>
+    <div class="table-container">
+      <table id="usersTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Joined</th>
+            <th>Phone</th>
+            <th>Balance</th>
+            <th>Earnings</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section>
+    <h2 class="section-title">Projects Management</h2>
+
+    <!-- Add Project Form -->
+    <div class="form-container">
+      <form id="addProjectForm">
+        <div class="form-grid">
+          <input type="text" id="projectTitle" placeholder="Project Title" required>
+          <input type="text" id="projectDescription" placeholder="Description" required>
+          <input type="number" id="projectMin" placeholder="Minimum Amount" required>
+          <input type="number" id="projectRoi" placeholder="ROI Percentage" required>
+          <select id="projectStatus">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-primary">Add Project</button>
+      </form>
+    </div>
+
+    <!-- Projects Table -->
+    <div class="table-container">
+      <table id="projectsTable">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Min Amount</th>
+            <th>ROI</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Activities Section -->
+  <section>
+    <h2 class="section-title">Activities Monitoring</h2>
+    
+    <!-- Activity Filters -->
+    <div class="filter-section">
+      <h3>Filter Activities</h3>
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="deposit">Deposit</button>
+      <button class="filter-btn" data-filter="withdraw">Withdrawal</button>
+      <button class="filter-btn" data-filter="investment">Investment</button>
+      <button class="filter-btn" data-filter="pending">Pending</button>
+      <button class="filter-btn" data-filter="approved">Approved</button>
+      <button class="filter-btn" data-filter="rejected">Rejected</button>
+    </div>
+
+    <div class="table-container">
+      <table id="activitiesTable">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Activity</th>
+            <th>Type</th>
+            <th>Project Title</th>
+            <th>ROI</th>
+            <th>Amount</th>
+            <th>Payer Name</th>
+            <th>Bank</th>
+            <th>Account Number</th>
+            <th>Account Name</th>
+            <th>Status</th>
+            <th>Timestamp</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<!-- Admin Login Modal -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <h2>Admin Login</h2>
+    <input type="email" id="adminEmail" placeholder="Email Address">
+    <input type="password" id="adminPassword" placeholder="Password">
+    <button id="adminLoginBtn" class="btn-primary" style="width: 100%;">Login</button>
+    <div class="forgot-password" id="forgotPassword">Forgot Password?</div>
+    <div id="loginError" style="color: var(--danger); margin-top: 1rem; text-align: center; font-size: 0.875rem;"></div>
+  </div>
+</div>
+
+<!-- Custom Alert/Confirm Modal -->
+<div id="customModal" class="custom-modal">
+  <div class="custom-modal-content">
+    <div class="custom-modal-header">
+      <div class="custom-modal-title" id="customModalTitle">Alert</div>
+      <span class="close" id="customModalClose">&times;</span>
+    </div>
+    <div class="custom-modal-body" id="customModalBody">
+      This is a custom modal message.
+    </div>
+    <div class="custom-modal-footer" id="customModalFooter">
+      <button id="customModalOk" class="btn-primary">OK</button>
+      <button id="customModalCancel" class="btn-danger" style="display: none;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase & JavaScript -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+const ADMIN_UID = "6ZDkVO5p7AaJEUeovZXbqs0xne02"; // Your admin UID
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDQfjbTudvHst6DJxFKHLGBH_gW9hlV9vw",
+  authDomain: "rivalry-esteem-investment.firebaseapp.com",
+  projectId: "rivalry-esteem-investment",
+  storageBucket: "rivalry-esteem-investment.firebasestorage.app",
+  messagingSenderId: "33375779957",
+  appId: "1:33375779957:web:764d8384688cb1dddd4c3c",
+  measurementId: "G-SH4M6H1BTC"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// Custom Modal System
+const customModal = document.getElementById('customModal');
+const customModalTitle = document.getElementById('customModalTitle');
+const customModalBody = document.getElementById('customModalBody');
+const customModalFooter = document.getElementById('customModalFooter');
+const customModalOk = document.getElementById('customModalOk');
+const customModalCancel = document.getElementById('customModalCancel');
+const customModalClose = document.getElementById('customModalClose');
+
+// Custom alert function
+function customAlert(message) {
+  return new Promise((resolve) => {
+    customModalTitle.textContent = 'Alert';
+    customModalBody.innerHTML = message;
+    customModalOk.textContent = 'OK';
+    customModalCancel.style.display = 'none';
+    
+    customModalOk.onclick = () => {
+      customModal.style.display = 'none';
+      resolve(true);
+    };
+    
+    customModalClose.onclick = () => {
+      customModal.style.display = 'none';
+      resolve(true);
+    };
+    
+    customModal.style.display = 'block';
+  });
+}
+
+// Custom confirm function
+function customConfirm(message) {
+  return new Promise((resolve) => {
+    customModalTitle.textContent = 'Confirm';
+    customModalBody.innerHTML = message;
+    customModalOk.textContent = 'OK';
+    customModalCancel.textContent = 'Cancel';
+    customModalCancel.style.display = 'inline-block';
+    
+    customModalOk.onclick = () => {
+      customModal.style.display = 'none';
+      resolve(true);
+    };
+    
+    customModalCancel.onclick = () => {
+      customModal.style.display = 'none';
+      resolve(false);
+    };
+    
+    customModalClose.onclick = () => {
+      customModal.style.display = 'none';
+      resolve(false);
+    };
+    
+    customModal.style.display = 'block';
+  });
+}
+
+// Custom prompt function
+function customPrompt(message, defaultValue = '') {
+  return new Promise((resolve) => {
+    customModalTitle.textContent = 'Prompt';
+    customModalBody.innerHTML = `
+      <div>${message}</div>
+      <input type="text" id="customPromptInput" class="custom-modal-input" value="${defaultValue}">
+    `;
+    customModalOk.textContent = 'OK';
+    customModalCancel.textContent = 'Cancel';
+    customModalCancel.style.display = 'inline-block';
+    
+    const input = document.getElementById('customPromptInput');
+    
+    customModalOk.onclick = () => {
+      customModal.style.display = 'none';
+      resolve(input.value);
+    };
+    
+    customModalCancel.onclick = () => {
+      customModal.style.display = 'none';
+      resolve(null);
+    };
+    
+    customModalClose.onclick = () => {
+      customModal.style.display = 'none';
+      resolve(null);
+    };
+    
+    // Handle Enter key
+    input.onkeypress = (e) => {
+      if (e.key === 'Enter') {
+        customModalOk.click();
+      }
+    };
+    
+    customModal.style.display = 'block';
+    input.focus();
+    input.select();
+  });
+}
+
+// Override browser alerts and confirms
+window.alert = customAlert;
+window.confirm = customConfirm;
+
+// Login Modal
+const loginModal = document.getElementById('loginModal');
+const closeModal = document.getElementById('closeModal');
+closeModal.onclick = () => loginModal.style.display = 'none';
+window.onclick = e => { if(e.target === loginModal) loginModal.style.display='none'; };
+loginModal.style.display = 'block';
+const loginError = document.getElementById('loginError');
+
+// Login
+document.getElementById('adminLoginBtn').onclick = async () => {
+  const email = document.getElementById('adminEmail').value.trim();
+  const password = document.getElementById('adminPassword').value;
+  loginError.textContent = "";
+  try {
+    const { user } = await auth.signInWithEmailAndPassword(email, password);
+    if(user.uid === ADMIN_UID){
+      loginModal.style.display = 'none';
+      initDashboard();
+    } else {
+      await auth.signOut();
+      loginError.textContent = "Unauthorized. Admin only.";
+    }
+  } catch(err){
+    loginError.textContent = err.message;
+  }
+};
+
+// Forgot Password
+document.getElementById('forgotPassword').onclick = async () => {
+  const email = document.getElementById('adminEmail').value.trim();
+  if (!email) {
+    loginError.textContent = "Please enter your email first";
+    return;
+  }
+  
+  try {
+    await auth.sendPasswordResetEmail(email);
+    loginError.textContent = "Password reset email sent!";
+    loginError.style.color = "var(--success)";
+  } catch (err) {
+    loginError.textContent = err.message;
+    loginError.style.color = "var(--danger)";
+  }
+};
+
+// Logout
+document.getElementById('logoutBtn').onclick = async () => {
+  await auth.signOut();
+  location.reload();
+};
+
+// Dashboard Initialization
+function initDashboard(){
+  listenUsers();
+  listenActivities();
+  listenProjects();
+  setupFilters();
+}
+
+// Stats counters
+let totalMembers = 0;
+let activeProjects = 0;
+let pendingActivities = 0;
+let totalBalance = 0;
+
+function updateStats() {
+  document.getElementById('totalMembers').textContent = totalMembers;
+  document.getElementById('activeProjects').textContent = activeProjects;
+ // document.getElementById('pendingActivities').textContent = pendingActivities;
+  document.getElementById('totalBalance').textContent = '₦' + totalBalance.toFixed(2);
+}
+
+// ----- USERS -----
+const usersTbody = document.querySelector("#usersTable tbody");
+
+function listenUsers() {
+  db.collection("users").onSnapshot(snapshot => {
+    usersTbody.innerHTML = "";
+    totalMembers = snapshot.size;
+    totalBalance = 0;
+    
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      totalBalance += parseFloat(data.balance) || 0;
+      
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${data.name}</td>
+        <td>${data.email}</td>
+        <td>${data.joined}</td>
+        <td>${data.phone||''}</td>
+        <td>₦${data.balance}</td>
+        <td>₦${data.earnings}</td>
+        <td><span class="status-badge ${data.role === 'admin' ? 'status-active' : 'status-inactive'}">${data.role}</span></td>
+        <td>
+          <button onclick="editUser('${doc.id}')" class="btn-warning">Edit</button>
+          <button onclick="deleteUser('${doc.id}')" class="btn-danger">Delete</button>
+        </td>`;
+      usersTbody.appendChild(tr);
+    });
+    updateStats();
+  });
+}
+
+window.addUser = async () => {
+  const name = await customPrompt("Name:");
+  if (!name) return;
+  
+  const email = await customPrompt("Email:");
+  if (!email) return;
+  
+  const phone = await customPrompt("Phone:");
+  if (!phone) return;
+  
+  const balanceStr = await customPrompt("Balance:", "0");
+  if (balanceStr === null) return;
+  const balance = parseFloat(balanceStr) || 0;
+  
+  const earningsStr = await customPrompt("Earnings:", "0");
+  if (earningsStr === null) return;
+  const earnings = parseFloat(earningsStr) || 0;
+  
+  const role = await customPrompt("Role (user/admin):", "user");
+  if (!role) return;
+  
+  const joined = new Date().toISOString().slice(0,10);
+  
+  await db.collection("users").add({name,email,phone,balance,earnings,role,joined});
+  await customAlert("User added successfully!");
+};
+document.getElementById('addUserBtn').onclick = addUser;
+
+window.editUser = async (uid) => {
+  const doc = await db.collection("users").doc(uid).get();
+  const data = doc.data();
+  
+  const name = await customPrompt("Name:", data.name);
+  if (name === null) return;
+  
+  const email = await customPrompt("Email:", data.email);
+  if (email === null) return;
+  
+  const phone = await customPrompt("Phone:", data.phone);
+  if (phone === null) return;
+  
+  const balanceStr = await customPrompt("Balance:", data.balance.toString());
+  if (balanceStr === null) return;
+  const balance = parseFloat(balanceStr);
+  
+  const earningsStr = await customPrompt("Earnings:", data.earnings.toString());
+  if (earningsStr === null) return;
+  const earnings = parseFloat(earningsStr);
+  
+  const role = await customPrompt("Role:", data.role);
+  if (role === null) return;
+  
+  await db.collection("users").doc(uid).update({name,email,phone,balance,earnings,role});
+  await customAlert("User updated successfully!");
+};
+
+window.deleteUser = async (uid) => {
+  const confirmed = await customConfirm("Are you sure you want to delete this user?");
+  if (confirmed) {
+    await db.collection("users").doc(uid).delete();
+    await customAlert("User deleted successfully!");
+  }
+};
+
+// ----- PROJECTS -----
+const projectsTableBody = document.querySelector("#projectsTable tbody");
+const addProjectForm = document.getElementById("addProjectForm");
+
+function listenProjects() {
+  db.collection("projects").onSnapshot(snapshot => {
+    projectsTableBody.innerHTML = "";
+    activeProjects = 0;
+    
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.status === 'active') activeProjects++;
+      
+      const row = document.createElement("tr");
+      row.setAttribute("data-id", doc.id);
+      row.innerHTML = `
+        <td>${data.title}</td>
+        <td>${data.description}</td>
+        <td>₦${data.min}</td>
+        <td>${data.roi}%</td>
+        <td><span class="status-badge ${data.status === 'active' ? 'status-active' : 'status-inactive'}">${data.status}</span></td>
+        <td>
+          <button onclick="editProject('${doc.id}')" class="btn-warning">Edit</button>
+          <button onclick="deleteProject('${doc.id}')" class="btn-danger">Delete</button>
+        </td>
+      `;
+      projectsTableBody.appendChild(row);
+    });
+    updateStats();
+  });
+}
+
+// Add Project
+addProjectForm.addEventListener("submit", async e => {
+  e.preventDefault();
+  const newProject = {
+    title: document.getElementById("projectTitle").value,
+    description: document.getElementById("projectDescription").value,
+    min: parseFloat(document.getElementById("projectMin").value),
+    roi: parseFloat(document.getElementById("projectRoi").value),
+    status: document.getElementById("projectStatus").value
+  };
+
+  await db.collection("projects").add(newProject);
+  addProjectForm.reset();
+  await customAlert("Project added successfully!");
+});
+
+// Edit Project
+async function editProject(docId) {
+  const docRef = db.collection("projects").doc(docId);
+  const snap = await docRef.get();
+  if (!snap.exists) {
+    await customAlert("Project not found");
+    return;
+  }
+
+  const data = snap.data();
+
+  const newTitle = await customPrompt("Edit Title:", data.title);
+  if (newTitle === null) return;
+  
+  const newDescription = await customPrompt("Edit Description:", data.description);
+  if (newDescription === null) return;
+  
+  const newMin = await customPrompt("Edit Min Amount:", data.min.toString());
+  if (newMin === null) return;
+  
+  const newRoi = await customPrompt("Edit ROI:", data.roi.toString());
+  if (newRoi === null) return;
+  
+  const newStatus = await customPrompt("Edit Status (active/inactive):", data.status);
+  if (newStatus === null) return;
+
+  if (newTitle && newDescription && newMin && newRoi && newStatus) {
+    await docRef.update({
+      title: newTitle,
+      description: newDescription,
+      min: parseFloat(newMin),
+      roi: parseFloat(newRoi),
+      status: newStatus
+    });
+    await customAlert("Project updated successfully!");
+  }
+}
+
+// Delete Project
+async function deleteProject(docId) {
+  const confirmed = await customConfirm("Are you sure you want to delete this project?");
+  if (confirmed) {
+    await db.collection("projects").doc(docId).delete();
+    await customAlert("Project deleted successfully!");
+  }
+}
+
+// ----- ACTIVITIES -----
+const activitiesTbody = document.querySelector("#activitiesTable tbody");
+let allActivities = [];
+let currentFilter = 'all';
+
+function setupFilters() {
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Remove active class from all buttons
+      filterButtons.forEach(b => b.classList.remove('active'));
+      // Add active class to clicked button
+      btn.classList.add('active');
+      
+      currentFilter = btn.dataset.filter;
+      console.log('Filter changed to:', currentFilter);
+      filterActivities();
+    });
+  });
+}
+
+function filterActivities() {
+  const rows = activitiesTbody.querySelectorAll('tr');
+  console.log('Total rows to filter:', rows.length);
+  
+  rows.forEach((row, index) => {
+    let showRow = false;
+    
+    if (currentFilter === 'all') {
+      showRow = true;
+    } else if (currentFilter === 'pending' || currentFilter === 'approved' || currentFilter === 'rejected') {
+      // Filter by status (11th column)
+      const status = row.querySelector('td:nth-child(11)').textContent.toLowerCase();
+      console.log(`Row ${index} status:`, status);
+      showRow = status === currentFilter;
+    } else {
+      // Filter by activity type (3rd column)
+      const type = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+      console.log(`Row ${index} type:`, type);
+      showRow = type === currentFilter;
+    }
+    
+    row.style.display = showRow ? '' : 'none';
+    console.log(`Row ${index} display:`, showRow ? 'visible' : 'hidden');
+  });
+}
+
+function listenActivities(){
+  db.collection("users").onSnapshot(usersSnap => {
+    activitiesTbody.innerHTML = "";
+    pendingActivities = 0; // Reset counter
+    allActivities = [];
+    
+    let userCount = 0;
+    let totalUsers = usersSnap.size;
+    
+    usersSnap.forEach(userDoc => {
+      db.collection("users").doc(userDoc.id).collection("activities")
+        .onSnapshot(snapshot => {
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            console.log("Activity data:", data); // Debug log
+            
+            // Count pending activities
+            if (data.status === 'pending') {
+              pendingActivities++;
+              console.log("Found pending activity! Total:", pendingActivities);
+            }
+            
+            let tr = activitiesTbody.querySelector(`tr[data-id='${doc.ref.path}']`);
+            if(!tr){
+              tr = document.createElement("tr");
+              tr.setAttribute("data-id", doc.ref.path);
+              activitiesTbody.appendChild(tr);
+            }
+            
+            const statusClass = data.status === 'pending' ? 'status-pending' : 
+                              data.status === 'approved' ? 'status-approved' : 'status-rejected';
+            
+            tr.innerHTML = `
+              <td>${userDoc.data().name}</td>
+              <td>${data.activity || ''}</td> 
+              <td>${data.type||''}</td>
+              <td>${data.projectTitle || ''}</td>
+              <td>${data.roi || ''}%</td>  
+              <td>₦${data.amount || ''}</td> 
+              <td>${data.payerName || ''}</td> 
+              <td>${data.bank || ''}</td> 
+              <td>${data.accountNumber || ''}</td> 
+              <td>${data.accountName || ''}</td> 
+              <td><span class="status-badge ${statusClass}">${data.status||'pending'}</span></td>
+              <td>${
+  data.date
+    ? (typeof data.date.toDate === "function"       
+        ? data.date.toDate().toLocaleString('en-US', {
+            day: '2-digit', month: 'short', year: 'numeric',
+            hour: '2-digit', minute: '2-digit', hour12: true
+          })
+        : (
+            data.date?.seconds
+              ? new Date(data.date.seconds * 1000).toLocaleString('en-US', {
+                  day: '2-digit', month: 'short', year: 'numeric',
+                  hour: '2-digit', minute: '2-digit', hour12: true
+                })
+              : new Date(data.date).toLocaleString('en-US', {
+                  day: '2-digit', month: 'short', year: 'numeric',
+                  hour: '2-digit', minute: '2-digit', hour12: true
+                })
+          )
+      )
+    : ''
+}
+    </td>
+              <td>
+                <button onclick="approveActivity('${doc.ref.path}')" class="btn-success">Approve</button>
+                <button onclick="rejectActivity('${doc.ref.path}')" class="btn-danger">Reject</button>
+                <button onclick="editActivityFull('${doc.ref.path}')" class="btn-warning">Edit</button>
+                <button onclick="deleteActivity('${doc.ref.path}')" class="btn-danger">Delete</button>
+              </td>`;
+          });
+          
+          // Update stats after processing each user's activities
+          updateStats();
+          filterActivities();
+        }, error => {
+          console.error("Error listening to activities:", error);
+        });
+    });
+    
+    // If no users, still update stats
+    if (totalUsers === 0) {
+      updateStats();
+    }
+  }, error => {
+    console.error("Error listening to users:", error);
+  });
+}
+
+async function deleteActivity(docPath) {
+  const confirmed = await customConfirm("Are you sure you want to delete this activity?");
+  if (confirmed) {
+    await db.doc(docPath).delete();
+    // Remove the row manually
+    const row = document.querySelector(`tr[data-id='${docPath}']`);
+    if (row) row.remove();
+    await customAlert("Activity deleted successfully!");
+  }
+}
+
+async function editActivityFull(docPath) {
+  const docRef = db.doc(docPath);
+  const snap = await docRef.get();
+  if (!snap.exists) {
+    await customAlert("Activity not found");
+    return;
+  }
+
+  const data = snap.data();
+  
+  // Get all fields one by one
+  const user = await customPrompt("Edit User Name:", data.user || "");
+  if (user === null) return;
+  
+  const activity = await customPrompt("Edit Activity:", data.activity || "");
+  if (activity === null) return;
+  
+  const type = await customPrompt("Edit Type:", data.type || "");
+  if (type === null) return;
+  
+  const projectTitle = await customPrompt("Edit Project Title:", data.projectTitle || "");
+  if (projectTitle === null) return;
+  
+  const roi = await customPrompt("Edit ROI:", data.roi || "");
+  if (roi === null) return;
+  
+  const amount = await customPrompt("Edit Amount:", data.amount || "");
+  if (amount === null) return;
+  
+  const payerName = await customPrompt("Edit Payer Name:", data.payerName || "");
+  if (payerName === null) return;
+  
+  const bank = await customPrompt("Edit Bank:", data.bank || "");
+  if (bank === null) return;
+  
+  const accountNumber = await customPrompt("Edit Account Number:", data.accountNumber || "");
+  if (accountNumber === null) return;
+  
+  const accountName = await customPrompt("Edit Account Name:", data.accountName || "");
+  if (accountName === null) return;
+  
+  const status = await customPrompt("Edit Status:", data.status || "");
+  if (status === null) return;
+
+  // Update all fields
+  await docRef.update({
+    user,
+    activity,
+    type,
+    projectTitle,
+    roi,
+    amount,
+    payerName,
+    bank,
+    accountNumber,
+    accountName,
+    status
+  });
+
+  // Update the table row manually
+  const row = document.querySelector(`tr[data-id='${docPath}']`);
+  if (row) {
+    row.querySelector("td:nth-child(1)").textContent = user;
+    row.querySelector("td:nth-child(2)").textContent = activity;
+    row.querySelector("td:nth-child(3)").textContent = type;
+    row.querySelector("td:nth-child(4)").textContent = projectTitle;
+    row.querySelector("td:nth-child(5)").textContent = roi;
+    row.querySelector("td:nth-child(6)").textContent = `₦${amount}`;
+    row.querySelector("td:nth-child(7)").textContent = payerName;
+    row.querySelector("td:nth-child(8)").textContent = bank;
+    row.querySelector("td:nth-child(9)").textContent = accountNumber;
+    row.querySelector("td:nth-child(10)").textContent = accountName;
+    row.querySelector("td:nth-child(11)").textContent = status;
+    row.querySelector("td:nth-child(11)").className = `status-badge ${
+      status === 'pending' ? 'status-pending' : 
+      status === 'approved' ? 'status-approved' : 'status-rejected'
+    }`;
+  }
+
+  await customAlert("Activity updated successfully!");
+}
+
+window.approveActivity = async (path) => {
+  await db.doc(path).update({status:"approved"});
+  await customAlert("Activity approved!");
+};
+
+window.rejectActivity = async (path) => {
+  await db.doc(path).update({status:"rejected"});
+  await customAlert("Activity rejected!");
+};
+</script>
+</body>
+</html>
