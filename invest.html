@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Invest | Rivalry Esteem</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #d4af37;
+      --primary-dark: #bfa233;
+      --dark-bg: #181c27;
+      --card-bg: #23283b;
+      --light-text: #f4f5f7;
+      --gray-text: #b0b3c6;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: linear-gradient(135deg, var(--dark-bg) 0%, #1e2335 100%); 
+      margin:0; 
+      color:var(--light-text); 
+      min-height:100vh; 
+      padding-bottom:70px; 
+      line-height: 1.6;
+    }
+    
+    .main-content { 
+      padding: 1.5rem 1rem; 
+      max-width: 900px; 
+      margin: 0 auto; 
+    }
+    
+    .invest-header { 
+      display: flex; 
+      align-items: center; 
+      gap: 1rem; 
+      margin-bottom: 1.5rem; 
+    }
+    
+    .invest-header h1 { 
+      font-size: 2.2rem; 
+      color: var(--primary); 
+      font-weight: 700; 
+      margin: 0; 
+      letter-spacing: -0.5px;
+    }
+    
+    .invest-icon {
+      color: var(--primary);
+      font-size: 2rem;
+      background: rgba(212, 175, 55, 0.1);
+      border-radius: 50%;
+      padding: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .project-list { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 1.5rem; 
+      margin-bottom: 2rem; 
+    }
+    
+    .project-card { 
+      background: var(--card-bg); 
+      border-radius: 16px; 
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+      padding: 1.5rem; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 0.8rem; 
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+    }
+    
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .project-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+      background: var(--primary);
+    }
+    
+    .project-title { 
+      font-size: 1.3rem; 
+      font-weight: 700; 
+      color: var(--primary); 
+    }
+    
+    .project-desc { 
+      color: var(--gray-text); 
+      font-size: 1rem; 
+    }
+    
+    .project-meta { 
+      display: flex; 
+      gap: 1.5rem; 
+      font-size: 0.95rem; 
+      margin-top: 0.5rem; 
+      color: var(--light-text); 
+      flex-wrap: wrap;
+    }
+    
+    .project-meta span { 
+      display: flex; 
+      align-items: center; 
+      gap: 0.5rem; 
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.5rem 0.8rem;
+      border-radius: 8px;
+    }
+    
+    .invest-btn { 
+      margin-top: 0.7rem; 
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--dark-bg); 
+      border: none; 
+      border-radius: 10px; 
+      padding: 0.8rem 1.5rem; 
+      font-size: 1rem; 
+      font-weight: 600; 
+      cursor: pointer; 
+      transition: all 0.3s ease; 
+      align-self: flex-end; 
+      display: flex; 
+      align-items: center; 
+      gap: 0.5rem; 
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+    }
+    
+    .invest-btn:hover { 
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4);
+    }
+    
+    .no-projects { 
+      text-align: center; 
+      color: var(--gray-text); 
+      margin: 3rem 0; 
+      font-size: 1.1rem;
+    }
+    
+    .modal-bg { 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      right: 0; 
+      bottom: 0; 
+      background: rgba(24,28,39,0.85); 
+      z-index: 9999; 
+      display: none; 
+      align-items: center; 
+      justify-content: center; 
+      padding: 1rem;
+    }
+    
+    .modal { 
+      background: var(--card-bg); 
+      border-radius: 16px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+      padding: 2rem; 
+      max-width: 450px; 
+      width: 100%; 
+      color: var(--light-text); 
+      display: flex; 
+      flex-direction: column; 
+      gap: 1.2rem; 
+      position: relative; 
+      animation: fadeIn 0.3s; 
+    }
+    
+    @keyframes fadeIn { 
+      from { opacity: 0; transform: scale(0.95); } 
+      to { opacity: 1; transform: scale(1); } 
+    }
+    
+    .modal-close { 
+      position: absolute; 
+      top: 1.2rem; 
+      right: 1.2rem; 
+      background: none; 
+      border: none; 
+      color: var(--gray-text); 
+      font-size: 1.3rem; 
+      cursor: pointer; 
+      transition: color 0.2s;
+    }
+    
+    .modal-close:hover {
+      color: var(--light-text);
+    }
+    
+    .modal-title { 
+      font-size: 1.4rem; 
+      font-weight: 700; 
+      color: var(--primary); 
+      margin-bottom: 0.2rem; 
+    }
+    
+    .modal-info { 
+      font-size: 1rem; 
+      color: var(--gray-text); 
+      margin-bottom: 0.7rem; 
+    }
+    
+    .modal-error { 
+      color: var(--danger); 
+      font-weight: 600; 
+      font-size: 0.97rem; 
+      margin-bottom: 0.5rem; 
+      display: none; 
+      background: rgba(220, 53, 69, 0.1);
+      padding: 0.8rem;
+      border-radius: 8px;
+      border-left: 3px solid var(--danger);
+    }
+    
+    .modal-success { 
+      color: var(--success); 
+      font-weight: 600; 
+      font-size: 0.97rem; 
+      margin-bottom: 0.5rem; 
+      display: none; 
+      background: rgba(40, 167, 69, 0.1);
+      padding: 0.8rem;
+      border-radius: 8px;
+      border-left: 3px solid var(--success);
+    }
+    
+    .modal-btn { 
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--dark-bg); 
+      border: none; 
+      border-radius: 10px; 
+      padding: 0.9rem 0; 
+      font-size: 1rem; 
+      font-weight: 600; 
+      cursor: pointer; 
+      margin-top: 0.5rem; 
+      transition: all 0.3s ease; 
+      width: 100%; 
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+    }
+    
+    .modal-btn:hover { 
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4);
+    }
+    
+    /* Sticky Contact Buttons */
+    .contact-buttons {
+      position: fixed;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
+    
+    .contact-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+    
+    .contact-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .email-btn {
+      background: linear-gradient(135deg, #BB001B 0%, #e74c3c 100%);
+    }
+    
+    .telegram-btn {
+      background: linear-gradient(135deg, #0088cc 0%, #2AABEE 100%);
+    }
+    
+    .bottom-nav { 
+      position: fixed; 
+      bottom: 0; 
+      left: 0; 
+      width: 100vw; 
+      background: var(--card-bg); 
+      display: flex; 
+      justify-content: space-around; 
+      align-items: center; 
+      padding: 0.5rem 0; 
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1); 
+      z-index: 100; 
+      height: 70px; 
+    }
+    
+    .bottom-nav a { 
+      flex: 1; 
+      text-align: center; 
+      color: var(--gray-text); 
+      text-decoration: none; 
+      font-size: 1.5rem; 
+      padding: 0.3rem 0 0 0; 
+      transition: color 0.2s; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+    }
+    
+    .bottom-nav a.active, .bottom-nav a:active, .bottom-nav a:hover { 
+      color: var(--primary); 
+    }
+    
+    .bottom-nav-label { 
+      font-size: 0.75rem; 
+      margin-top: 0.2rem; 
+      color: var(--gray-text); 
+      font-weight: 500; 
+      letter-spacing: 0.5px; 
+    }
+    
+    .bottom-nav a.active .bottom-nav-label { 
+      color: var(--primary); 
+    }
+    
+    @media (max-width: 768px) {
+      .contact-buttons {
+        right: 10px;
+        bottom: 80px;
+        top: auto;
+        transform: none;
+        flex-direction: row;
+      }
+      
+      .contact-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+      }
+      
+      .project-meta {
+        gap: 0.8rem;
+      }
+      
+      .project-meta span {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.9rem;
+      }
+    }
+    
+    @media (min-width: 768px) { 
+      .main-content { padding: 2.5rem 2rem; } 
+      .invest-header h1 { font-size: 2.2rem; } 
+      .bottom-nav { display: none !important; } 
+    }
+
+    /* Mobile-specific adjustments */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem 0.75rem; /* Reduced from 1.5rem 1rem */
+  }
+  
+  .invest-header {
+    margin-bottom: 1.25rem; /* Reduced from 1.5rem */
+    gap: 0.75rem; /* Reduced from 1rem */
+  }
+  
+  .invest-header h1 {
+    font-size: 1.5rem; /* Reduced from 2.2rem */
+  }
+  
+  .invest-icon {
+    font-size: 1.5rem; /* Reduced from 2rem */
+    padding: 0.6rem; /* Reduced from 0.8rem */
+  }
+  
+  .project-list {
+    gap: 1rem; /* Reduced from 1.5rem */
+    margin-bottom: 1.5rem; /* Reduced from 2rem */
+  }
+  
+  .project-card {
+    padding: 1.25rem; /* Reduced from 1.5rem */
+    border-radius: 12px; /* Reduced from 16px */
+    gap: 0.6rem; /* Reduced from 0.8rem */
+  }
+  
+  .project-title {
+    font-size: 1.1rem; /* Reduced from 1.3rem */
+  }
+  
+  .project-desc {
+    font-size: 0.9rem; /* Reduced from 1rem */
+  }
+  
+  .project-meta {
+    gap: 0.75rem; /* Reduced from 1.5rem */
+    font-size: 0.85rem; /* Reduced from 0.95rem */
+  }
+  
+  .project-meta span {
+    padding: 0.4rem 0.6rem; /* Reduced from 0.5rem 0.8rem */
+  }
+  
+  .invest-btn {
+    padding: 0.7rem 1.25rem; /* Reduced from 0.8rem 1.5rem */
+    font-size: 0.9rem; /* Reduced from 1rem */
+  }
+  
+  .modal {
+    padding: 1.5rem; /* Reduced from 2rem */
+    margin: 1rem; /* Added margin for better spacing */
+  }
+  
+  .modal-title {
+    font-size: 1.2rem; /* Reduced from 1.4rem */
+  }
+  
+  .modal-info {
+    font-size: 0.9rem; /* Reduced from 1rem */
+  }
+  
+  .bottom-nav a {
+    font-size: 1.3rem; /* Reduced from 1.5rem */
+  }
+  
+  .contact-buttons {
+    right: 10px;
+    bottom: 80px;
+    top: auto;
+    transform: none;
+    flex-direction: row;
+  }
+  
+  .contact-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .main-content {
+    padding: 0.75rem 0.5rem; /* Even more compact */
+  }
+  
+  .invest-header h1 {
+    font-size: 1.3rem; /* Smaller for very small screens */
+  }
+  
+  .project-card {
+    padding: 1rem; /* More compact */
+  }
+  
+  .project-meta {
+    flex-direction: column; /* Stack meta info vertically */
+    gap: 0.5rem;
+  }
+  
+  .project-meta span {
+    width: 100%; /* Full width on small screens */
+    justify-content: space-between;
+  }
+  
+  .invest-btn {
+    width: 100%; /* Full width button */
+    justify-content: center;
+  }
+  
+  .modal {
+    padding: 1.25rem; /* More compact modal */
+  }
+}
+
+.project-meta { 
+  display: flex; 
+  gap: 1.5rem; 
+  font-size: 0.95rem; 
+  margin-top: 0.5rem; 
+  color: var(--light-text); 
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .project-meta {
+    gap: 0.75rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .project-meta span {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+body { 
+  font-family: 'Inter', sans-serif; 
+  background: linear-gradient(135deg, var(--dark-bg) 0%, #1e2335 100%); 
+  margin:0; 
+  color:var(--light-text); 
+  min-height:100vh; 
+  padding-bottom:70px; 
+  line-height: 1.6;
+  font-size: 14px; /* Base font size for mobile */
+}
+
+@media (min-width: 768px) {
+  body {
+    font-size: 16px; /* Reset to normal on larger screens */
+  }
+}
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+  <!-- Sticky Contact Buttons -->
+  <div class="contact-buttons">
+    <a href="mailto:rivalryesteem@yahoo.com" class="contact-btn email-btn" title="Email Us">
+      <i class="fas fa-envelope"></i>
+    </a>
+    <a href="https://t.me/+UkJvUeudQNk3OTVk" target="_blank" class="contact-btn telegram-btn" title="Telegram">
+      <i class="fab fa-telegram-plane"></i>
+    </a>
+  </div>
+
+  <main class="main-content">
+    <div class="invest-header">
+      <div class="invest-icon">
+        <i class="fas fa-arrow-up-right-dots"></i>
+      </div>
+      <h1>Investment Opportunities</h1>
+    </div>
+    <div id="projectList" class="project-list"></div>
+    <div id="noProjects" class="no-projects" style="display:none;">
+      <i class="fas fa-folder-open" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+      <p>No investment opportunities available at the moment.</p>
+      <p style="margin-top: 0.5rem; font-size: 0.9rem;">Please check back later for new investment options.</p>
+    </div>
+  </main>
+
+  <div class="modal-bg" id="modalBg">
+    <div class="modal" id="investModal">
+      <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-info" id="modalInfo"></div>
+      <div class="modal-error" id="modalError"></div>
+      <div class="modal-success" id="modalSuccess"></div>
+      <button class="modal-btn" id="modalInvestBtn">Confirm Investment</button>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="dashboard.html"><i class="fas fa-chart-pie"></i><span class="bottom-nav-label">Dashboard</span></a>
+    <a href="invest.html" class="active"><i class="fas fa-wallet"></i><span class="bottom-nav-label">Invest</span></a>
+    <a href="profile.html"><i class="fas fa-user"></i><span class="bottom-nav-label">Profile</span></a>
+    <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span class="bottom-nav-label">Logout</span></a>
+  </nav>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDQfjbTudvHst6DJxFKHLGBH_gW9hlV9vw",
+      authDomain: "rivalry-esteem-investment.firebaseapp.com",
+      projectId: "rivalry-esteem-investment",
+      storageBucket: "rivalry-esteem-investment.firebasestorage.app",
+      messagingSenderId: "33375779957",
+      appId: "1:33375779957:web:764d8384688cb1dddd4c3c",
+      measurementId: "G-SH4M6H1BTC"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+    let projects = [];
+
+    // Fetch projects from Firebase
+    async function fetchProjects() {
+      const list = document.getElementById('projectList');
+      const noProjects = document.getElementById('noProjects');
+      list.innerHTML = '';
+
+      try {
+        const snapshot = await db.collection('projects').get();
+        projects = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        const openProjects = projects.filter(p => p.status.toLowerCase() === "active");
+        if (openProjects.length === 0) {
+          noProjects.style.display = "block";
+          return;
+        }
+        noProjects.style.display = "none";
+
+        openProjects.forEach(project => {
+          const card = document.createElement('div');
+          card.className = 'project-card';
+          card.innerHTML = `
+            <div class="project-title">${project.title}</div>
+            <div class="project-desc">${project.description}</div>
+            <div class="project-meta">
+              <span><i class="fas fa-coins"></i> Min: ₦${project.min.toLocaleString()}</span>
+              <span><i class="fas fa-chart-line"></i> ROI: ₦${project.roi.toLocaleString()}</span>
+            </div>
+            <button class="invest-btn" onclick="openInvestModal('${project.id}')">
+              <i class="fas fa-arrow-up-right-dots"></i> Invest Now
+            </button>
+          `;
+          list.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Error fetching projects:", err);
+        noProjects.innerHTML = `
+          <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem; color: var(--warning);"></i>
+          <p>Failed to load investment opportunities.</p>
+          <p style="margin-top: 0.5rem; font-size: 0.9rem;">Please check your connection and try again.</p>
+        `;
+        noProjects.style.display = "block";
+      }
+    }
+
+    // Modal functions
+    let selectedProject = null;
+    function openInvestModal(projectId) {
+      selectedProject = projects.find(p => p.id === projectId);
+      document.getElementById('modalTitle').textContent = selectedProject.title;
+      document.getElementById('modalInfo').innerHTML = `
+        <div>${selectedProject.description}</div>
+        <div style="margin-top: 1rem; background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span><strong>Minimum Investment:</strong></span>
+            <span>₦${selectedProject.min.toLocaleString()}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span><strong>ROI:</strong></span>
+            <span>₦${selectedProject.roi.toLocaleString()}</span>
+          </div>
+        </div>
+      `;
+      document.getElementById('modalError').style.display = "none";
+      document.getElementById('modalSuccess').style.display = "none";
+      document.getElementById('modalInvestBtn').style.display = "block";
+      document.getElementById('modalBg').style.display = "flex";
+    }
+    
+    function closeModal() {
+      document.getElementById('modalBg').style.display = "none";
+    }
+
+    // Confirm Investment
+    document.getElementById('modalInvestBtn').onclick = async function() {
+      const errorEl = document.getElementById('modalError');
+      const successEl = document.getElementById('modalSuccess');
+      errorEl.style.display = "none";
+      successEl.style.display = "none";
+
+      if (!selectedProject) return;
+
+      const user = auth.currentUser;
+      if (!user) {
+        errorEl.textContent = "You must be logged in to make an investment.";
+        errorEl.style.display = "block";
+        return;
+      }
+
+      try {
+        const userRef = db.collection("users").doc(user.uid);
+        const userDoc = await userRef.get();
+        const balance = Number(userDoc.data()?.balance) || 0;
+
+        if (balance < selectedProject.min) {
+          errorEl.textContent = `Insufficient balance. Minimum ₦${selectedProject.min.toLocaleString()} required.`;
+          errorEl.style.display = "block";
+          return;
+        }
+
+        await userRef.update({ balance: balance - selectedProject.min });
+        
+        try {
+          await userRef.collection("activities").add({
+            activity: "Investment",
+            projectTitle: selectedProject.title,
+            amount: selectedProject.min,
+            roi: selectedProject.roi,
+            status: "In Progress",
+            date: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        } catch(e) {
+          console.error("Could not log activity:", e);
+        }
+
+        successEl.innerHTML = `
+          <i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>
+          Investment submitted successfully!
+          <div style="margin-top: 0.5rem; font-weight: normal;">
+            Status: <span style="color: var(--warning);">In Progress</span>
+          </div>
+        `;
+        successEl.style.display = "block";
+        document.getElementById('modalInvestBtn').style.display = "none";
+        setTimeout(closeModal, 3500);
+
+      } catch (err) {
+        console.error(err);
+        errorEl.textContent = "An error occurred while processing your investment. Please try again.";
+        errorEl.style.display = "block";
+      }
+    };
+
+    // Check auth and fetch projects
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        window.location.href = "login.html";
+      } else {
+        fetchProjects();
+      }
+    });
+
+    // Add this to each page's JavaScript section
+async function trackPageView() {
+  try {
+    const user = auth.currentUser;
+    if (user) {
+      await db.collection('analytics').add({
+        type: 'page_view',
+        page: document.title,
+        userId: user.uid,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        userAgent: navigator.userAgent,
+        path: window.location.pathname
+      });
+    }
+  } catch (error) {
+    console.error("Error tracking page view:", error);
+  }
+}
+
+// Call this when the page loads
+auth.onAuthStateChanged(user => {
+  if (user) {
+    trackPageView();
+  }
+});
+    
+    // Logout functionality
+    document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+      e.preventDefault();
+      await auth.signOut();
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>

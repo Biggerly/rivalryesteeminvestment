@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Dashboard | Rivalry Esteem</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <style>
+    :root {
+      --primary: #d4af37;
+      --primary-dark: #bfa233;
+      --dark-bg: #181c27;
+      --card-bg: #23283b;
+      --light-text: #f4f5f7;
+      --gray-text: #b0b3c6;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, var(--dark-bg) 0%, #1e2335 100%);
+      margin: 0;
+      color: var(--light-text);
+      min-height: 100vh;
+      padding-bottom: 70px;
+      line-height: 1.6;
+      font-size: 14px; /* Base font size for mobile */
+    }
+    
+    .main-content {
+      padding: 1rem 0.75rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    
+    .dashboard-header h1 {
+      font-size: 1.5rem; /* Reduced from 2.2rem */
+      color: var(--primary);
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: -0.5px;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 0.6rem 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .user-info i {
+      font-size: 1.25rem; /* Reduced from 1.5rem */
+      color: var(--primary);
+    }
+    
+    .user-info span {
+      font-weight: 600;
+      color: #fff;
+      font-size: 0.95rem; /* Reduced from 1.1rem */
+    }
+    
+    .affiliate-banner {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: linear-gradient(90deg, var(--primary) 0%, #f5e8b0 100%);
+      color: var(--dark-bg);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1.25rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+    }
+    
+    .affiliate-banner::before {
+      content: "COMING SOON";
+      position: absolute;
+      top: 8px;
+      right: -25px;
+      background: var(--danger);
+      color: white;
+      padding: 3px 25px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      transform: rotate(45deg);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    
+    .affiliate-banner i {
+      font-size: 1.75rem; /* Reduced from 2.2rem */
+      color: var(--primary);
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      padding: 0.6rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .dashboard-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .action-btn {
+      flex: 1 1 45%;
+      min-width: 140px;
+      text-align: center;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--dark-bg);
+      border-radius: 10px;
+      padding: 0.85rem;
+      font-size: 0.95rem; /* Reduced from 1.1rem */
+      font-weight: 600;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+    }
+    
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4);
+    }
+    
+    .cards {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+      justify-content: center;
+    }
+    
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.25rem;
+      min-width: 140px;
+      flex: 1 1 45%;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-3px);
+    }
+    
+    .card .card-icon {
+      font-size: 1.75rem; /* Reduced from 2rem */
+      color: var(--primary);
+      margin-bottom: 0.6rem;
+    }
+    
+    .card .card-title {
+      color: var(--gray-text);
+      font-size: 0.85rem; /* Reduced from 0.95rem */
+      margin-bottom: 0.4rem;
+    }
+    
+    .card .card-value {
+      font-size: 1.5rem; /* Reduced from 1.8rem */
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .section-title {
+      font-size: 1.1rem; /* Reduced from 1.3rem */
+      color: #fff;
+      margin-bottom: 0.85rem;
+      font-weight: 600;
+    }
+    
+    .activity-table-container {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      overflow-x: auto; /* Allow horizontal scrolling on small screens */
+    }
+    
+    .activity-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 500px; /* Ensure table doesn't get too narrow */
+    }
+    
+    .activity-table th, .activity-table td {
+      padding: 0.75rem;
+      text-align: left;
+      font-size: 0.85rem; /* Smaller font for table */
+    }
+    
+    .activity-table th {
+      background: rgba(24, 28, 39, 0.8);
+      color: var(--primary);
+      font-weight: 600;
+    }
+    
+    .activity-table tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    
+    .activity-table td.status-success { 
+      color: var(--success); 
+      font-weight: 600; 
+    }
+    
+    .activity-table td.status-pending { 
+      color: var(--warning); 
+      font-weight: 600; 
+    }
+    
+    .activity-table td.status-failed { 
+      color: var(--danger); 
+      font-weight: 600; 
+    }
+    
+    .status-inprogress {
+      color: var(--warning);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+    
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100vw;
+      background: var(--card-bg);
+      display: flex;
+      justify-content: space-around;
+      padding: 0.5rem 0;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 100;
+    }
+    
+    .bottom-nav a {
+      text-align: center;
+      color: var(--gray-text);
+      font-size: 1.1rem; /* Reduced from 1.3rem */
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: color 0.3s;
+      flex: 1;
+    }
+    
+    .bottom-nav a.active,
+    .bottom-nav a:hover { 
+      color: var(--primary); 
+    }
+    
+    .bottom-nav-label {
+      font-size: 0.65rem; /* Reduced from 0.7rem */
+      margin-top: 2px;
+    }
+    
+    /* Sticky Contact Buttons */
+    .contact-buttons {
+      position: fixed;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 1000;
+    }
+    
+    .contact-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1rem;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+    
+    .contact-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .email-btn {
+      background: linear-gradient(135deg, #BB001B 0%, #e74c3c 100%);
+    }
+    
+    .telegram-btn {
+      background: linear-gradient(135deg, #0088cc 0%, #2AABEE 100%);
+    }
+    
+    /* Mobile-specific adjustments */
+    @media (max-width: 768px) {
+      body {
+        font-size: 14px;
+      }
+      
+      .main-content {
+        padding: 0.75rem 0.5rem;
+      }
+      
+      .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+      }
+      
+      .dashboard-header h1 {
+        font-size: 1.4rem;
+      }
+      
+      .user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem; /* Reduced from 0.5rem */
+  background: var(--card-bg);
+  border-radius: 8px; /* Reduced from 10px */
+  padding: 0.4rem 0.8rem; /* Reduced from 0.6rem 1rem */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Reduced shadow */
+}
+
+.user-info i {
+  font-size: 1rem; /* Reduced from 1.25rem */
+  color: var(--primary);
+}
+
+.user-info span {
+  font-weight: 600;
+  color: #fff;
+  font-size: 0.85rem; /* Reduced from 0.95rem */
+}
+      
+      .action-btn {
+        flex: 1 1 100%;
+        padding: 0.75rem;
+        font-size: 0.9rem;
+      }
+      
+      .cards {
+        gap: 0.5rem;
+      }
+      
+      .card {
+        flex: 1 1 100%;
+        padding: 1rem;
+      }
+      
+      .card .card-value {
+        font-size: 1.4rem;
+      }
+      
+      .contact-buttons {
+        right: 8px;
+        bottom: 60px;
+        top: auto;
+        transform: none;
+        flex-direction: row;
+      }
+      
+      .contact-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 0.9rem;
+      }
+      
+      .activity-table th, .activity-table td {
+        padding: 0.6rem;
+        font-size: 0.8rem;
+      }
+    }
+    
+    /* Extra small devices */
+    @media (max-width: 480px) {
+      .main-content {
+        padding: 0.5rem;
+      }
+      
+      .dashboard-header h1 {
+        font-size: 1.3rem;
+      }
+      
+      .affiliate-banner {
+        padding: 0.75rem;
+      }
+      
+      .affiliate-banner i {
+        font-size: 1.5rem;
+        padding: 0.5rem;
+      }
+      
+      .action-btn {
+        padding: 0.7rem;
+        font-size: 0.85rem;
+      }
+      
+      .card {
+        padding: 0.85rem;
+      }
+      
+      .card .card-value {
+        font-size: 1.3rem;
+      }
+      
+      .section-title {
+        font-size: 1rem;
+      }
+    }
+    
+    @media(min-width: 768px) {
+      .bottom-nav { 
+        display: none; 
+      }
+      
+      body {
+        font-size: 16px; /* Reset to normal size on larger screens */
+      }
+    }
+
+    @media (max-width: 768px) {
+  /* ... existing code ... */
+  
+  .dashboard-header {
+    flex-direction: row; /* Change from column to row */
+    justify-content: space-between; /* Space between title and user info */
+    align-items: center; /* Center vertically */
+    margin-bottom: 1rem;
+  }
+  
+  .dashboard-header h1 {
+    font-size: 1.4rem;
+    flex: 1; /* Allow title to take available space */
+  }
+  
+  .user-info {
+    width: auto; /* Remove full width */
+    justify-content: flex-end; /* Align content to the right */
+    margin-left: auto; /* Push to the right */
+  }
+  
+  /* ... rest of your existing mobile styles ... */
+}
+  </style>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+  <!-- Sticky Contact Buttons -->
+  <div class="contact-buttons">
+    <a href="mailto:rivalryesteem@yahoo.com" class="contact-btn email-btn" title="Email Us">
+      <i class="fas fa-envelope"></i>
+    </a>
+    <a href="https://t.me/+UkJvUeudQNk3OTVk" target="_blank" class="contact-btn telegram-btn" title="Telegram">
+      <i class="fab fa-telegram-plane"></i>
+    </a>
+  </div>
+
+  <main class="main-content">
+    <div class="dashboard-header">
+      <h1>Dashboard</h1>
+      <div class="user-info">
+        <i class="fas fa-user-circle"></i>
+        <span id="userName">Hi, Investor!</span>
+      </div>
+    </div>
+    
+    <div class="affiliate-banner">
+      <i class="fas fa-users"></i>
+      <div>
+        <strong>Become an Affiliate!</strong>
+        <div>Earn rewards by inviting friends to Rivalry Esteem.</div>
+      </div>
+    </div>
+    
+    <div class="dashboard-actions">
+      <a class="action-btn" href="deposit.html">
+        <i class="fas fa-plus-circle"></i> Deposit
+      </a>
+      <a class="action-btn" href="withdrawal.html">
+        <i class="fas fa-arrow-down"></i> Withdraw
+      </a>
+    </div>
+    
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon"><i class="fas fa-wallet"></i></div>
+        <div class="card-title">Total Balance</div>
+        <div class="card-value" id="balance">₦0</div>
+      </div>
+      <div class="card">
+        <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="card-title">Total Earnings</div>
+        <div class="card-value" id="earnings">₦0</div>
+      </div>
+    </div>
+    
+    <div>
+      <div class="section-title">Recent Activity</div>
+      <div class="activity-table-container">
+        <table class="activity-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Activity</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="activityBody">
+            <tr><td colspan="4">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+  
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="active">
+      <i class="fas fa-chart-pie"></i>
+      <span class="bottom-nav-label">Dashboard</span>
+    </a>
+    <a href="invest.html">
+      <i class="fas fa-wallet"></i>
+      <span class="bottom-nav-label">Invest</span>
+    </a>
+    <a href="profile.html">
+      <i class="fas fa-user"></i>
+      <span class="bottom-nav-label">Profile</span>
+    </a>
+    <a href="#" id="logoutBtn">
+      <i class="fas fa-sign-out-alt"></i>
+      <span class="bottom-nav-label">Logout</span>
+    </a>
+  </nav>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDQfjbTudvHst6DJxFKHLGBH_gW9hlV9vw",
+      authDomain: "rivalry-esteem-investment.firebaseapp.com",
+      projectId: "rivalry-esteem-investment",
+      storageBucket: "rivalry-esteem-investment.firebasestorage.app",
+      messagingSenderId: "33375779957",
+      appId: "1:33375779957:web:764d8384688cb1dddd4c3c",
+      measurementId: "G-SH4M6H1BTC"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+    auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).catch(err => console.error(err));
+
+    function logActivity(userId, activityType, amount) {
+      db.collection("users").doc(userId).collection("activities").add({
+        activity: activityType,           // "Deposit", "Withdraw", "Investment"
+        amount: parseFloat(amount),
+        status: "Pending",                // Default: Pending
+        date: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        console.log(`${activityType} logged as pending.`);
+      }).catch(error => {
+        console.error("Error logging activity:", error);
+      });
+    }
+
+    function animateValue(id, start, end, duration) {
+      const obj = document.getElementById(id);
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const value = Math.floor(progress * (end - start) + start);
+        obj.textContent = "₦" + value.toLocaleString();
+        if (progress < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+
+    function loadDashboardCards(userId) {
+      db.collection("users").doc(userId).get().then(doc => {
+        if (doc.exists) {
+          const data = doc.data();
+          document.getElementById("userName").textContent = data.name || "Investor";
+          animateValue("balance", 0, data.balance || 0, 1200);
+          animateValue("earnings", 0, data.earnings || 0, 1200);
+        }
+      });
+    }
+
+    function loadActivity(userId) {
+      const tbody = document.getElementById("activityBody");
+      db.collection("users").doc(userId).collection("activities")
+        .orderBy("date", "desc").limit(10).get()
+        .then(snapshot => {
+          tbody.innerHTML = "";
+          if (snapshot.empty) {
+            tbody.innerHTML = '<tr><td colspan="4">No activity yet.</td></tr>';
+            return;
+          }
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            const date = data.date && data.date.toDate ? data.date.toDate().toLocaleDateString() : "";
+            const statusClass = data.status === "approved" ? "status-success" :
+              data.status === "Pending" ? "status-pending" :
+              data.status === "rejected" ? "status-failed" :
+              data.status === "In Progress" ? "status-inprogress" : "";
+
+            tbody.innerHTML += `
+              <tr>
+                <td>${date}</td>
+                <td>${data.activity}</td>
+                <td>₦${Number(data.amount).toLocaleString()}</td>
+                <td class="${statusClass}">${data.status}</td>
+              </tr>`;
+          });
+        });
+    }
+
+    auth.onAuthStateChanged(async (user) => {
+      if (!user) {
+        window.location.replace("login.html");
+        return;
+      }
+
+      // Optional: Token verification and role check
+      try {
+        const tokenResult = await user.getIdTokenResult(true);
+        if (tokenResult.claims.disabled) {
+          alert("Your account has been disabled.");
+          await auth.signOut();
+          window.location.replace("login.html");
+          return;
+        }
+      } catch (err) {
+        console.error("Token check failed:", err);
+        await auth.signOut();
+        window.location.replace("login.html");
+        return;
+      }
+
+      // Load user data
+      loadDashboardCards(user.uid);
+      loadActivity(user.uid);
+    });
+
+    // Add this to each page's JavaScript section
+    async function trackPageView() {
+      try {
+        const user = auth.currentUser;
+        if (user) {
+          await db.collection('analytics').add({
+            type: 'page_view',
+            page: document.title,
+            userId: user.uid,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            userAgent: navigator.userAgent,
+            path: window.location.pathname
+          });
+        }
+      } catch (error) {
+        console.error("Error tracking page view:", error);
+      }
+    }
+
+    // Call this when the page loads
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        trackPageView();
+      }
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", async (e) => {
+      e.preventDefault();
+      await auth.signOut();
+      window.location.replace("login.html"); // replace instead of href
+    });
+
+    // Desktop detection and alert
+function checkScreenSize() {
+  const bottomNav = document.querySelector('.bottom-nav');
+  const isDesktop = window.innerWidth >= 768; // Same breakpoint where nav hides
+  
+  if (isDesktop && !localStorage.getItem('desktopAlertShown')) {
+    setTimeout(() => {
+      alert("💻 Desktop View Detected\n\nYou're viewing this on a larger screen. Navigation buttons are available in the main content area. For mobile navigation, use the bottom navigation bar when viewing on smaller screens.");
+      localStorage.setItem('desktopAlertShown', 'true');
+    }, 1000);
+  }
+}
+
+// Check on page load
+checkScreenSize();
+
+// Check when window is resized
+window.addEventListener('resize', function() {
+  // Clear the flag when switching back to mobile to show alert again if needed
+  if (window.innerWidth < 768) {
+    localStorage.removeItem('desktopAlertShown');
+  } else {
+    checkScreenSize();
+  }
+});
+
+// Optional: Add a more subtle notification instead of alert
+function showDesktopNotification() {
+  const bottomNav = document.querySelector('.bottom-nav');
+  const isDesktop = window.innerWidth >= 768;
+  
+  if (isDesktop && !localStorage.getItem('desktopNotificationShown')) {
+    // Create a custom notification instead of alert
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--primary);
+      color: var(--dark-bg);
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      z-index: 10000;
+      font-weight: 600;
+      max-width: 300px;
+      animation: slideIn 0.3s ease;
+    `;
+    
+    notification.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+        <i class="fas fa-desktop"></i>
+        <strong>Desktop View</strong>
+      </div>
+      <div style="font-size: 0.9rem; font-weight: normal;">
+        Navigation is available in the main content. Use bottom navigation on mobile.
+      </div>
+      <button onclick="this.parentElement.remove()" style="
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: none;
+        border: none;
+        color: var(--dark-bg);
+        cursor: pointer;
+        font-size: 1rem;
+      ">×</button>
+    `;
+    
+    document.body.appendChild(notification);
+    localStorage.setItem('desktopNotificationShown', 'true');
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+      if (notification.parentElement) {
+        notification.remove();
+      }
+    }, 5000);
+  }
+}
+
+// Add CSS for animation
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+`;
+document.head.appendChild(style);
+
+// Use the notification version instead of alert (choose one)
+// showDesktopNotification(); // Uncomment this and comment out checkScreenSize() call if you prefer the notification
+
+// Update the existing checkScreenSize call to use notification
+// Replace the existing checkScreenSize(); call with:
+showDesktopNotification();
+
+// Also update the resize event
+window.addEventListener('resize', function() {
+  if (window.innerWidth < 768) {
+    localStorage.removeItem('desktopNotificationShown');
+  } else {
+    showDesktopNotification();
+  }
+});
+  </script>
+  
+</body>
+</html>
