@@ -87,6 +87,66 @@
       .hero-text h1 { font-size: 2rem; }
       .contact-buttons { right: 10px; flex-direction: row; top: auto; bottom: 20px; transform: none; width: 100%; justify-content: center; }
     }
+
+    /* Add to your style section */
+.video-tutorial-btn {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  background: #d4af37;
+  color: #1a1f36;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  z-index: 999;
+  transition: 0.3s;
+  border: 2px solid white;
+}
+
+.video-tutorial-btn:hover {
+  transform: scale(1.1);
+  background: white;
+}
+
+.video-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-modal.active {
+  display: flex;
+}
+
+.video-modal-content {
+  position: relative;
+  width: 90%;
+  max-width: 800px;
+  background: #1a1f36;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.close-modal {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+}
   </style>
 </head>
 <body>
@@ -107,14 +167,29 @@
     </nav>
   </header>
 
-  <section class="hero">
-    <div class="hero-text">
-      <h1>Better Update for the Wise.</h1>
-      <p>Save ₦5,000 monthly and earn ₦50 profit. No gree for poverty<br>let your money work for you.</p>
+  
+
+    <!-- Replace the existing hero section with this -->
+<section class="hero" style="background: linear-gradient(135deg, #1a1f36 0%, #2a2f4a 100%); height: auto; min-height: 90vh;">
+  <div class="hero-content" style="display: flex; flex-wrap: wrap; align-items: center; max-width: 1200px; margin: 0 auto; gap: 3rem; padding: 2rem;">
+    <div class="hero-text" style="flex: 1; min-width: 300px; text-align: left;">
+      <h1 style="font-size: 2.5rem;">Better Update for the Wise.</h1>
+      <p style="font-size: 1.2rem;">Save ₦5,000 monthly and earn ₦50 profit. Watch how it works below.</p>
       <a href="login.html" class="btn">Start Saving Now <i class="fas fa-arrow-right"></i></a>
     </div>
-  </section>
-
+    <div class="video-container" style="flex: 1; min-width: 300px;">
+      <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.3);">
+        <iframe 
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+          src="https://www.youtube.com/embed/YOUR_VIDEO_ID" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
   <section id="stats" class="fade-in">
     <h2 class="section-title">The Real Numbers</h2>
     <p class="section-subtitle">Transparency is our watchword. Here is what we've done so far.</p>
@@ -135,6 +210,42 @@
       </div>
     </div>
   </section>
+
+  <!-- Add this after the stats section -->
+<section class="tutorial-section fade-in" style="background: linear-gradient(145deg, #f8f9fa 0%, #ffffff 100%); padding: 4rem 1.5rem;">
+  <div class="container" style="max-width: 1000px; margin: 0 auto;">
+    <h2 class="section-title">📺 Watch How It Works</h2>
+    <p class="section-subtitle">See how easy it is to start your savings journey</p>
+    
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); margin: 2rem 0;">
+      <iframe 
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+        src="https://www.youtube.com/embed/YOUR_VIDEO_ID?rel=0&modestbranding=1" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+      </iframe>
+    </div>
+    
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; margin-top: 2rem;">
+      <div style="text-align: center; flex: 1; min-width: 150px;">
+        <i class="fas fa-check-circle" style="color: #d4af37; font-size: 2rem;"></i>
+        <h4>Step 1: Register</h4>
+        <p style="color: #666;">Create your account in 2 minutes</p>
+      </div>
+      <div style="text-align: center; flex: 1; min-width: 150px;">
+        <i class="fas fa-money-bill-wave" style="color: #d4af37; font-size: 2rem;"></i>
+        <h4>Step 2: Save ₦5,000</h4>
+        <p style="color: #666;">Make your monthly savings</p>
+      </div>
+      <div style="text-align: center; flex: 1; min-width: 150px;">
+        <i class="fas fa-chart-line" style="color: #d4af37; font-size: 2rem;"></i>
+        <h4>Step 3: Earn ₦50</h4>
+        <p style="color: #666;">Get monthly profits automatically</p>
+      </div>
+    </div>
+  </div>
+</section>
 
   <section id="goals" class="fade-in">
     <h2 class="section-title">Why Choose Us?</h2>
@@ -167,7 +278,37 @@
     </p>
   </footer>
 
-  <script>
+  <!-- Add before closing body tag -->
+<div class="video-tutorial-btn" onclick="openVideoModal()">
+  <i class="fas fa-play" style="font-size: 1.5rem;"></i>
+</div>
+
+<div class="video-modal" id="videoModal">
+  <div class="video-modal-content">
+    <span class="close-modal" onclick="closeVideoModal()">&times;</span>
+    <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+      <iframe 
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+        id="tutorialVideo"
+        src="" 
+        frameborder="0" 
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+function openVideoModal() {
+  document.getElementById('videoModal').classList.add('active');
+  document.getElementById('tutorialVideo').src = "https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1";
+}
+
+function closeVideoModal() {
+  document.getElementById('videoModal').classList.remove('active');
+  document.getElementById('tutorialVideo').src = "";
+}
+
     // Fade-in on scroll
     const fadeElements = document.querySelectorAll('.fade-in');
     const fadeObserver = new IntersectionObserver(entries => {
@@ -216,5 +357,6 @@
   </script>
 </body>
 </html>
+
 
 
