@@ -522,6 +522,78 @@
         <div>Earn rewards by inviting friends to Rivalry Esteem Ventures.</div>
       </div>
     </div>
+
+    <!-- Add this after the dashboard-header div -->
+<div class="video-welcome-banner">
+  <div class="video-welcome-content">
+    <div class="video-welcome-text">
+      <i class="fas fa-play-circle" style="color: var(--primary); font-size: 2rem; margin-bottom: 0.5rem;"></i>
+      <h3>👋 New here? Watch how to get started!</h3>
+      <p>Learn how to deposit, track your earnings, and withdraw profits in under 2 minutes.</p>
+    </div>
+    <button class="video-welcome-btn" onclick="openDashboardTutorial()">
+      <i class="fas fa-play"></i> Watch Tutorial
+    </button>
+  </div>
+</div>
+
+<!-- Add the CSS -->
+<style>
+.video-welcome-banner {
+  background: linear-gradient(135deg, var(--card-bg) 0%, #2a3045 100%);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-left: 4px solid var(--primary);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.video-welcome-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.video-welcome-text {
+  flex: 1;
+  min-width: 250px;
+}
+
+.video-welcome-text h3 {
+  color: white;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.video-welcome-text p {
+  color: var(--gray-text);
+  font-size: 0.9rem;
+}
+
+.video-welcome-btn {
+  background: var(--primary);
+  color: var(--dark-bg);
+  border: none;
+  padding: 0.85rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.video-welcome-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+  background: white;
+}
+</style>
     
     <div class="dashboard-actions">
       <a class="action-btn" href="deposit.html">
@@ -842,4 +914,5 @@ window.addEventListener('resize', function() {
 </body>
 
 </html>
+
 
