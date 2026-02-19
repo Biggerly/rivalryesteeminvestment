@@ -523,57 +523,73 @@
       </div>
     </div>
 
-   <!-- Add this anywhere on your dashboard where you want the video -->
-<!-- Add this anywhere on your dashboard where you want the video -->
-<div class="tutorial-box" onclick="playTutorial()">
-  <div class="tutorial-content">
-    <div class="tutorial-icon">🎥</div>
-    <div class="tutorial-text">
-      <h4>New to the Rivalry Esteem Ventures?</h4>
-      <p>Watch 2-min tutorial → How to deposit, track profits & withdraw</p>
+<!-- Simple YouTube Tutorial Link -->
+<a href="https://www.youtube.com/watch?v=4GD-hEJtNDI" target="_blank" class="tutorial-link" style="text-decoration: none;">
+  <div class="tutorial-box">
+    <div class="tutorial-content">
+      <div class="tutorial-icon">🎥</div>
+      <div class="tutorial-text">
+        <h4>📺 New to Rivalry Esteem Ventures?</h4>
+        <p>Click to watch tutorial → How to deposit, track profits & withdraw</p>
+      </div>
+      <div class="play-icon">▶</div>
     </div>
   </div>
-</div>
-
-<!-- Video Modal -->
-<div class="video-popup" id="tutorialVideo">
-  <div class="video-popup-content">
-    <span class="video-close" onclick="closeTutorial()">&times;</span>
-    <iframe id="youtubeFrame" width="100%" height="100%" src="" frameborder="0" allowfullscreen></iframe>
-  </div>
-</div>
+</a>
 
 <style>
 .tutorial-box {
-  background: #23283b;
-  border-left: 4px solid #d4af37;
-  border-radius: 10px;
-  padding: 15px;
+  background: linear-gradient(135deg, #23283b 0%, #2a3045 100%);
+  border: 1px solid #d4af37;
+  border-radius: 12px;
+  padding: 16px;
   margin: 20px 0;
   cursor: pointer;
-  transition: 0.3s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.1);
+  position: relative;
+  overflow: hidden;
 }
 
 .tutorial-box:hover {
-  background: #2a3045;
-  transform: translateX(5px);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.2);
+  border-color: #ffd700;
+}
+
+.tutorial-box:hover .play-icon {
+  transform: scale(1.2);
+  color: #ffd700;
 }
 
 .tutorial-content {
   display: flex;
   align-items: center;
   gap: 15px;
+  position: relative;
+  z-index: 2;
 }
 
 .tutorial-icon {
-  font-size: 30px;
+  font-size: 36px;
+  background: rgba(212, 175, 55, 0.1);
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.tutorial-text {
+  flex: 1;
 }
 
 .tutorial-text h4 {
   color: #d4af37;
   margin: 0 0 5px 0;
   font-size: 16px;
+  font-weight: 600;
 }
 
 .tutorial-text p {
@@ -582,55 +598,37 @@
   font-size: 14px;
 }
 
-/* Video Popup */
-.video-popup {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.9);
-  z-index: 10000;
-}
-
-.video-popup.active {
+.play-icon {
+  font-size: 24px;
+  color: #d4af37;
+  background: rgba(212, 175, 55, 0.1);
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
 }
 
-.video-popup-content {
-  position: relative;
-  width: 90%;
-  max-width: 700px;
-  height: 400px;
-  background: #000;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.video-close {
+/* Add a subtle background effect */
+.tutorial-box::before {
+  content: '';
   position: absolute;
-  top: -30px;
-  right: 0;
-  color: white;
-  font-size: 30px;
-  cursor: pointer;
-  z-index: 10;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+  z-index: 1;
 }
 
-.video-close:hover {
-  color: #d4af37;
-}
-
+/* Mobile adjustments */
 @media (max-width: 768px) {
-  .video-popup-content {
-    height: 250px;
-  }
-  
   .tutorial-icon {
-    font-size: 25px;
+    font-size: 28px;
+    width: 50px;
+    height: 50px;
   }
   
   .tutorial-text h4 {
@@ -640,9 +638,14 @@
   .tutorial-text p {
     font-size: 13px;
   }
+  
+  .play-icon {
+    font-size: 20px;
+    width: 35px;
+    height: 35px;
+  }
 }
 </style>
-
 
     
     <div class="dashboard-actions">
@@ -960,28 +963,12 @@ window.addEventListener('resize', function() {
   }
 });
 
-const VIDEO_ID = "4GD-hEJtNDI"; // Replace with your YouTube ID
-
-
-function playTutorial() {
-  document.getElementById('tutorialVideo').classList.add('active');
-  document.getElementById('youtubeFrame').src = `https://www.youtube.com/embed/${4GD-hEJtNDI}?autoplay=1`;
-}
-
-function closeTutorial() {
-  document.getElementById('tutorialVideo').classList.remove('active');
-  document.getElementById('youtubeFrame').src = "";
-}
-
-// Close when clicking outside
-document.getElementById('tutorialVideo').addEventListener('click', function(e) {
-  if (e.target === this) closeTutorial();
-});
 </script>
   
 </body>
 
 </html>
+
 
 
 
