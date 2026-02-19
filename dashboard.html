@@ -524,6 +524,7 @@
     </div>
 
    <!-- Add this anywhere on your dashboard where you want the video -->
+<!-- Add this anywhere on your dashboard where you want the video -->
 <div class="tutorial-box" onclick="playTutorial()">
   <div class="tutorial-content">
     <div class="tutorial-icon">🎥</div>
@@ -642,24 +643,7 @@
 }
 </style>
 
-<script>
-const VIDEO_ID = "4GD-hEJtNDI"; // Replace with your YouTube ID
 
-function playTutorial() {
-  document.getElementById('tutorialVideo').classList.add('active');
-  document.getElementById('youtubeFrame').src = `https://www.youtube.com/embed/${4GD-hEJtNDI}?autoplay=1`;
-}
-
-function closeTutorial() {
-  document.getElementById('tutorialVideo').classList.remove('active');
-  document.getElementById('youtubeFrame').src = "";
-}
-
-// Close when clicking outside
-document.getElementById('tutorialVideo').addEventListener('click', function(e) {
-  if (e.target === this) closeTutorial();
-});
-</script>
     
     <div class="dashboard-actions">
       <a class="action-btn" href="deposit.html">
@@ -975,11 +959,30 @@ window.addEventListener('resize', function() {
     showDesktopNotification();
   }
 });
-  </script>
+
+const VIDEO_ID = "4GD-hEJtNDI"; // Replace with your YouTube ID
+
+
+function playTutorial() {
+  document.getElementById('tutorialVideo').classList.add('active');
+  document.getElementById('youtubeFrame').src = `https://www.youtube.com/embed/${4GD-hEJtNDI}?autoplay=1`;
+}
+
+function closeTutorial() {
+  document.getElementById('tutorialVideo').classList.remove('active');
+  document.getElementById('youtubeFrame').src = "";
+}
+
+// Close when clicking outside
+document.getElementById('tutorialVideo').addEventListener('click', function(e) {
+  if (e.target === this) closeTutorial();
+});
+</script>
   
 </body>
 
 </html>
+
 
 
 
