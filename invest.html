@@ -559,6 +559,23 @@
       .bottom-nav { display: none !important; } 
       body { font-size: 16px; }
     }
+
+    body { 
+  font-family: 'Inter', sans-serif; 
+  background: linear-gradient(135deg, var(--dark-bg) 0%, #1e2335 100%); 
+  margin:0; 
+  color:var(--light-text); 
+  min-height:100vh; 
+  padding-bottom:70px; 
+  line-height: 1.6;
+  font-size: 14px; /* Base font size for mobile */
+}
+
+@media (min-width: 768px) {
+  body {
+    font-size: 16px; /* Reset to normal on larger screens */
+  }
+}
   </style>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -874,3 +891,4 @@
   </script>
 </body>
 </html>
+
