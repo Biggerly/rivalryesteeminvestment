@@ -1116,90 +1116,110 @@ function filterActivities() {
 function listenActivities(){
   db.collection("users").onSnapshot(usersSnap => {
     activitiesTbody.innerHTML = "";
-    pendingActivities = 0; // Reset counter
-    allActivities = [];
+    pendingActivities = 0;
     
-    let userCount = 0;
+    let allActivities = [];
+    let processedUsers = 0;
     let totalUsers = usersSnap.size;
+    
+    if (totalUsers === 0) {
+      updateStats();
+      return;
+    }
     
     usersSnap.forEach(userDoc => {
       db.collection("users").doc(userDoc.id).collection("activities")
-  .orderBy("date", "desc")
-  .onSnapshot(snapshot => {
+        .onSnapshot(snapshot => {
+          // For this user, collect their activities
           snapshot.forEach(doc => {
             const data = doc.data();
-            console.log("Activity data:", data); // Debug log
             
             // Count pending activities
             if (data.status === 'pending') {
               pendingActivities++;
-              console.log("Found pending activity! Total:", pendingActivities);
             }
             
-            let tr = activitiesTbody.querySelector(`tr[data-id='${doc.ref.path}']`);
-            if(!tr){
-              tr = document.createElement("tr");
-              tr.setAttribute("data-id", doc.ref.path);
-              activitiesTbody.appendChild(tr);
-            }
-            
-            const statusClass = data.status === 'pending' ? 'status-pending' : 
-                              data.status === 'approved' ? 'status-approved' : 'status-rejected';
-            
-            tr.innerHTML = `
-              <td>${userDoc.data().name}</td>
-              <td>${data.activity || ''}</td> 
-              <td>${data.type||''}</td>
-              <td>${data.projectTitle || ''}</td>
-              <td>${data.roi || ''}%</td>  
-              <td>₦${data.amount || ''}</td> 
-              <td>${data.payerName || ''}</td> 
-              <td>${data.bank || ''}</td> 
-              <td>${data.accountNumber || ''}</td> 
-              <td>${data.accountName || ''}</td> 
-              <td><span class="status-badge ${statusClass}">${data.status||'pending'}</span></td>
-              <td>${
-  data.date
-    ? (typeof data.date.toDate === "function"       
-        ? data.date.toDate().toLocaleString('en-US', {
-            day: '2-digit', month: 'short', year: 'numeric',
-            hour: '2-digit', minute: '2-digit', hour12: true
-          })
-        : (
-            data.date?.seconds
-              ? new Date(data.date.seconds * 1000).toLocaleString('en-US', {
-                  day: '2-digit', month: 'short', year: 'numeric',
-                  hour: '2-digit', minute: '2-digit', hour12: true
-                })
-              : new Date(data.date).toLocaleString('en-US', {
-                  day: '2-digit', month: 'short', year: 'numeric',
-                  hour: '2-digit', minute: '2-digit', hour12: true
-                })
-          )
-      )
-    : ''
-}
-    </td>
-              <td>
-                <button onclick="approveActivity('${doc.ref.path}')" class="btn-success">Approve</button>
-                <button onclick="rejectActivity('${doc.ref.path}')" class="btn-danger">Reject</button>
-                <button onclick="editActivityFull('${doc.ref.path}')" class="btn-warning">Edit</button>
-                <button onclick="deleteActivity('${doc.ref.path}')" class="btn-danger">Delete</button>
-              </td>`;
+            // Add to our collection with user info and document path
+            allActivities.push({
+              id: doc.ref.path,
+              userData: userDoc.data(),
+              activityData: data,
+              date: data.date // Keep for sorting
+            });
           });
           
-          // Update stats after processing each user's activities
-          updateStats();
-          filterActivities();
+          processedUsers++;
+          
+          // After processing all users, sort and render
+          if (processedUsers === totalUsers) {
+            // Sort by date (most recent first)
+            allActivities.sort((a, b) => {
+              const dateA = a.date?.toDate?.() || (a.date?.seconds ? new Date(a.date.seconds * 1000) : new Date(a.date));
+              const dateB = b.date?.toDate?.() || (b.date?.seconds ? new Date(b.date.seconds * 1000) : new Date(b.date));
+              return dateB - dateA; // Descending order (newest first)
+            });
+            
+            // Render all activities
+            allActivities.forEach(item => {
+              const data = item.activityData;
+              const userDoc = { data: () => item.userData };
+              
+              let tr = document.createElement("tr");
+              tr.setAttribute("data-id", item.id);
+              
+              const statusClass = data.status === 'pending' ? 'status-pending' : 
+                                data.status === 'approved' ? 'status-approved' : 'status-rejected';
+              
+              tr.innerHTML = `
+                <td>${item.userData.name}</td>
+                <td>${data.activity || ''}</td> 
+                <td>${data.type||''}</td>
+                <td>${data.projectTitle || ''}</td>
+                <td>${data.roi || ''}%</td>  
+                <td>₦${data.amount || ''}</td> 
+                <td>${data.payerName || ''}</td> 
+                <td>${data.bank || ''}</td> 
+                <td>${data.accountNumber || ''}</td> 
+                <td>${data.accountName || ''}</td> 
+                <td><span class="status-badge ${statusClass}">${data.status||'pending'}</span></td>
+                <td>${
+                  data.date
+                    ? (typeof data.date.toDate === "function"       
+                        ? data.date.toDate().toLocaleString('en-US', {
+                            day: '2-digit', month: 'short', year: 'numeric',
+                            hour: '2-digit', minute: '2-digit', hour12: true
+                          })
+                        : (
+                            data.date?.seconds
+                              ? new Date(data.date.seconds * 1000).toLocaleString('en-US', {
+                                  day: '2-digit', month: 'short', year: 'numeric',
+                                  hour: '2-digit', minute: '2-digit', hour12: true
+                                })
+                              : new Date(data.date).toLocaleString('en-US', {
+                                  day: '2-digit', month: 'short', year: 'numeric',
+                                  hour: '2-digit', minute: '2-digit', hour12: true
+                                })
+                          )
+                    )
+                    : ''
+                }</td>
+                <td>
+                  <button onclick="approveActivity('${item.id}')" class="btn-success">Approve</button>
+                  <button onclick="rejectActivity('${item.id}')" class="btn-danger">Reject</button>
+                  <button onclick="editActivityFull('${item.id}')" class="btn-warning">Edit</button>
+                  <button onclick="deleteActivity('${item.id}')" class="btn-danger">Delete</button>
+                </td>`;
+              activitiesTbody.appendChild(tr);
+            });
+            
+            updateStats();
+            filterActivities();
+          }
         }, error => {
           console.error("Error listening to activities:", error);
+          processedUsers++;
         });
     });
-    
-    // If no users, still update stats
-    if (totalUsers === 0) {
-      updateStats();
-    }
   }, error => {
     console.error("Error listening to users:", error);
   });
