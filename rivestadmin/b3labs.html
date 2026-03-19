@@ -976,7 +976,7 @@ const projectsTableBody = document.querySelector("#projectsTable tbody");
 const addProjectForm = document.getElementById("addProjectForm");
 
 function listenProjects() {
-  db.collection("projects").onSnapshot(snapshot => {
+  db.collection("projects").orderBy("min", "asc").onSnapshot(snapshot => { 
     projectsTableBody.innerHTML = "";
     activeProjects = 0;
     
@@ -1124,7 +1124,8 @@ function listenActivities(){
     
     usersSnap.forEach(userDoc => {
       db.collection("users").doc(userDoc.id).collection("activities")
-        .onSnapshot(snapshot => {
+  .orderBy("date", "desc")
+  .onSnapshot(snapshot => {
           snapshot.forEach(doc => {
             const data = doc.data();
             console.log("Activity data:", data); // Debug log
