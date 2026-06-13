@@ -769,6 +769,19 @@
     }
 
     // Log Activity Function
+<<<<<<< HEAD
+    function logActivity(userId, activityType, amount, payerName, bank, accountNumber) {
+  return db.collection("users").doc(userId).collection("activities").add({
+    activity: activityType,
+    amount: Number(amount),
+    payerName: payerName,
+    bank: bank,           // ← ADD THIS
+    accountNumber: accountNumber,  // ← ADD THIS
+    status: "Pending",
+    date: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+
     function logActivity(userId, activityType, amount, payerName, bank, accountNumber) {
       return db.collection("users").doc(userId).collection("activities").add({
         activity: activityType,
@@ -781,6 +794,7 @@
         date: firebase.firestore.FieldValue.serverTimestamp()
       });
     }
+>>>>>>> acd0808a274b1b134f29426c5faeb5e7e00cb337
 
     // Handle Deposit Submission
     document.getElementById('depositForm').addEventListener('submit', async function(e) {
@@ -829,10 +843,18 @@ if (!payerName || payerName === "" || payerName.includes("verification failed") 
         }
 
         // Log deposit activity
+<<<<<<< HEAD
+        const bankSelect = document.getElementById('bankCode');
+const bankName = bankSelect.options[bankSelect.selectedIndex]?.text || '';
+const userAccountNumber = document.getElementById('userAccountNumber').value;
+=======
         const bankSelect = document.getElementById('bankCode');
         const bankName = bankSelect.options[bankSelect.selectedIndex]?.text || '';
         const userAccountNumber = document.getElementById('userAccountNumber').value.trim();
         await logActivity(user.uid, "Deposit", amountPaid, payerName, bankName, userAccountNumber);
+>>>>>>> acd0808a274b1b134f29426c5faeb5e7e00cb337
+
+await logActivity(user.uid, "Deposit", amountPaid, payerName, bankName, userAccountNumber);
 
         // Success message
         successMsg.innerHTML = `
