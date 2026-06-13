@@ -698,6 +698,41 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+// Function to check if current user is active
+async function checkCurrentUserActive() {
+  const currentUser = auth.currentUser;
+  if (currentUser && currentUser.uid !== ADMIN_UID) {
+    try {
+      const userDoc = await db.collection("users").doc(currentUser.uid).get();
+      const userData = userDoc.data();
+      
+      // If user is marked as inactive or deleted
+      if (!userDoc.exists || userData?.active === false || userData?.deletedAt) {
+        console.log("User is deactivated, signing out...");
+        await auth.signOut();
+        await customAlert("Your account has been deactivated. Please contact support.");
+        window.location.href = window.location.href; // Force reload
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error("Error checking user status:", error);
+      return true;
+    }
+  }
+  return true;
+}
+
+// Check on page load and periodically
+setInterval(async () => {
+  await checkCurrentUserActive();
+}, 5000); // Check every 5 seconds
+
+// Also check when any storage change happens (for multi-tab)
+window.addEventListener('storage', async () => {
+  await checkCurrentUserActive();
+});
+
 // Add this function to check if user is still active
 async function isUserActive(userId) {
   try {
@@ -1030,8 +1065,8 @@ window.deleteUser = async (uid) => {
     await db.collection("users").doc(uid).update({
       active: false,
       deletedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      email: `deleted_${Date.now()}_${userEmail}`, // Change email to prevent login
-      name: `[DELETED] ${userData.name}` // Mark name as deleted
+      email: `deleted_${Date.now()}_${userEmail}`,
+      name: `[DELETED] ${userData.name}`
     });
     
     // Delete user's activities
@@ -1043,9 +1078,26 @@ window.deleteUser = async (uid) => {
     
     await customAlert("✅ User has been deactivated. They can no longer sign in.");
     
+    // Auto-close the modal after 2 seconds
+    setTimeout(() => {
+      const modal = document.getElementById('customModal');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }, 2000);
+    
   } catch (error) {
     console.error("Error deleting user:", error);
     await customAlert("❌ Error deleting user: " + error.message);
+    
+    // Auto-close error modal after 3 seconds
+    setTimeout(() => {
+      const modal = document.getElementById('customModal');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }, 3000);
+    
   } finally {
     // Reset button state
     const deleteBtn = document.activeElement;

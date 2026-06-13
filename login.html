@@ -447,6 +447,23 @@
 
     const db = firebase.firestore();
 
+    // Function to check if user is active (not deleted)
+async function isUserActive(userId) {
+  try {
+    const userDoc = await db.collection("users").doc(userId).get();
+    const userData = userDoc.data();
+    
+    // Check if user is marked as deleted/inactive
+    if (!userDoc.exists || userData?.active === false || userData?.deletedAt) {
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error("Error checking user status:", error);
+    return false;
+  }
+}
+
     // --- UI toggles ---
     const showRegister = () => {
       document.getElementById('loginForm').style.display = 'none';
@@ -632,36 +649,53 @@
     };
 
     // --- Login ---
-    document.getElementById('loginForm').onsubmit = async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      const errorMsg = document.getElementById('loginError');
-      const loginBtn = document.getElementById('loginBtn');
-      
-      errorMsg.style.display = "none";
+   // --- Login ---
+document.getElementById('loginForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errorMsg = document.getElementById('loginError');
+  const loginBtn = document.getElementById('loginBtn');
+  
+  errorMsg.style.display = "none";
 
-      if (!email || !password) {
-        errorMsg.textContent = "Please enter both email and password.";
-        errorMsg.style.display = "block";
-        return;
-      }
+  if (!email || !password) {
+    errorMsg.textContent = "Please enter both email and password.";
+    errorMsg.style.display = "block";
+    return;
+  }
 
-      setLoading(loginBtn, true);
+  setLoading(loginBtn, true);
 
-      try {
-        const { user } = await auth.signInWithEmailAndPassword(email, password);
+  try {
+    const { user } = await auth.signInWithEmailAndPassword(email, password);
+    
+    // CHECK IF USER IS ACTIVE (NOT DELETED)
+    const active = await isUserActive(user.uid);
+    
+    if (!active) {
+      // User is deleted/deactivated - sign them out immediately
+      await auth.signOut();
+      errorMsg.textContent = "Your account has been deactivated. Please contact support.";
+      errorMsg.style.display = "block";
+      setLoading(loginBtn, false);
+      return;
+    }
 
-        await logActivity(user.uid, "login", { method: "password" });
-        await redirectByRole(user);
-        
-      } catch (err) {
-        errorMsg.textContent = getErrorMessage(err.code);
-        errorMsg.style.display = "block";
-      } finally {
-        setLoading(loginBtn, false);
-      }
-    };
+    await logActivity(user.uid, "login", { method: "password" });
+    await redirectByRole(user);
+    
+  } catch (err) {
+    errorMsg.textContent = getErrorMessage(err.code);
+    errorMsg.style.display = "block";
+    setLoading(loginBtn, false);
+  } finally {
+    // Only reset loading if we haven't already in the error case
+    if (loginBtn.disabled && !errorMsg.textContent.includes("deactivated")) {
+      setLoading(loginBtn, false);
+    }
+  }
+};
 
     // --- Forgot Password ---
     document.getElementById('forgotPasswordForm').onsubmit = async (e) => {
