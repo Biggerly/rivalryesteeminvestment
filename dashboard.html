@@ -964,6 +964,22 @@ window.addEventListener('resize', function() {
 });
 
 </script>
+
+<script>
+// Check if user is still active every 10 seconds
+setInterval(async () => {
+  const user = firebase.auth().currentUser;
+  if (user) {
+    const userDoc = await firebase.firestore().collection("users").doc(user.uid).get();
+    const userData = userDoc.data();
+    if (!userDoc.exists || userData?.active === false || userData?.deletedAt) {
+      await firebase.auth().signOut();
+      alert("Your account has been deactivated.");
+      window.location.href = "login.html";
+    }
+  }
+}, 10000);
+</script>
   
 </body>
 
